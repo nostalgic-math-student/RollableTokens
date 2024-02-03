@@ -21,14 +21,14 @@ const Layout: FC<ILayout> = ({ children }) => {
                 <div className="container mx-auto flex justify-between py-4 px-4 sm:px-0">
                     <Link href={"/"}>
                         <h1 className="flex cursor-pointer items-center font-extrabold">
-                            <Image src="/opensea.svg" width={36} height={36} />
+                            <Image src="/RollableIcon.png" width={64} height={64} className="rounded-full" />
                             <span className="pl-2 text-xl sm:pl-4 sm:text-2xl">
-                                Opensea
+                                Rollable Tokens
                             </span>
                         </h1>
                     </Link>
                     <button
-                        className="max-w-[120px] truncate  rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 py-2 px-5 text-white hover:opacity-80 sm:max-w-[200px]"
+                        className="max-w-[120px] truncate  rounded-full bg-gradient-to-r from-cyan-400 to-sky-500 py-15 px-5 text-white hover:opacity-80 sm:max-w-[200px] h-12 my-auto"
                         onClick={handelConnect}
                     >
                         {userAddress ? userAddress : "Connect MetaMask"}
@@ -36,10 +36,10 @@ const Layout: FC<ILayout> = ({ children }) => {
                 </div>
             </header>
             <main className="grow">{children}</main>
-            <footer className="bg-blue-500">
+            <footer className="bg-primary">
                 <div className="container mx-auto">
                     <p className="py-4 text-center text-white">
-                        © Martin Lin 2022
+                        ETH Cinco de Mayo project | 2024
                     </p>
                 </div>
             </footer>
