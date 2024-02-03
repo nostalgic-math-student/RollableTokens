@@ -8,10 +8,15 @@ export interface CollectionInfo {
     rerollCost: BigNumber,
 }
 
-import { BigNumber } from 'ethers'
-import { FC } from 'react'
+export interface HeroInfo {
+    userAddress: string,
+}
 
-const Hero: FC = ({ userAddress }) => {
+import { BigNumber } from 'ethers'
+import { NextPage } from 'next'
+
+
+const Hero: NextPage<HeroInfo> = ({ userAddress }) => {
     return (
         <div className='hero min-h-screen bg-base-200'>Hero! hello {userAddress} </div>
     )
