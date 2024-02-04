@@ -8,6 +8,7 @@ import { MARKETPLACE_CONTRACT_ADDRESS } from "../constant/app.constant";
 import NfcCard, { INfcCard } from "../components/NftCard";
 import Loading from "../components/Loading";
 import GameOfLife from "../components/GameOfLife";
+import CodeEditor from "../components/CodeEditor";
 
 const Home: NextPage = () => {
     // const [nftList, setNftList] = useState<INfcCard[]>([]);
@@ -46,6 +47,7 @@ const Home: NextPage = () => {
             <section>
 
                 {/* Body section : Main Skeleton + NFT Display */}
+                <CodeEditor />
             </section>
             {/* <Loading open={isLoading} /> */}
         </div>
