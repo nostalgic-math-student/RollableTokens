@@ -4,11 +4,12 @@ import { useState, useEffect } from "react";
 import { useAddress, useContract, useListings } from "@thirdweb-dev/react";
 import type { Marketplace } from "@thirdweb-dev/sdk";
 import Hero from "../../components/Hero/Index";
+import GameOfLife from "../../components/GameOfLife";
 import Loading from "../../components/Loading";
 
 const Home: NextPage = () => {
     const isLoading = false;
-    const address = useAddress();
+    const address = useAddress() || "";
 
     return (
         <div>
