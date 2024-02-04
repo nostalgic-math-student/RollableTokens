@@ -1,13 +1,42 @@
 "use client"
 import { useEffect, useState } from 'react'
 import React from 'react'
-import InnerHTML from 'dangerously-set-html-content';
 import Link from 'next/link';
 
 const CodeEditor = () => {
+
+    const staticTemplate = `<!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <script src="https://cdn.jsdelivr.net/npm/p5/lib/p5.js"></script>
+        <style>
+          html, body {
+      margin: 0;
+      padding: 0;
+    }
+    canvas {
+      display: block;
+    }
+    
+        </style>
+        <meta charset="utf-8" />
+      </head>
+      <body>
+        <main>
+        </main>
+        <script>
+        
+        </script>
+      </body>
+    </html>
+    `
+
     const [comp, setComp] = useState<any>();
-    const [Code, setCode] = useState('<h1>Ain no way, Ain no efin way</h1>');
-    const [Snippet, setSnippet] = useState("<h1>unu</h1>");
+    const [Code, setCode] = useState(staticTemplate);
+    const [Snippet, setSnippet] = useState(staticTemplate);
+
+
+
 
     useEffect(() => {
         if (window) {
@@ -34,7 +63,8 @@ const CodeEditor = () => {
         height: '500px', // Let's start with a cute height, but it can grow!
         border: '1px solid #ccc',
         minHeight: '100px', // Minimum height so it's never too tiny
-        minWidth: '100px', // Minimum width for the same reason
+        minWidth: '100px',
+        background: 'white', // Minimum width for the same reason
     };
 
 
@@ -45,7 +75,7 @@ const CodeEditor = () => {
                 CodeEditor
                 {Comps ? (
                     <Comps className='text-black overflow-y-auto '
-                        value='<h1>Ain no way, Ain no efin way</h1>'
+                        value={staticTemplate}
                         maxHeight="100"
                         options={{
                             mode: "js",
@@ -56,13 +86,13 @@ const CodeEditor = () => {
                 ) : null}
             </div>
 
-            <div className='m-6 h-auto gap-6'>
+            <div className='m-6 h-auto gap-6 text-white'>
                 Code preview:
                 <iframe style={iframeStyle} srcDoc={Snippet} />
             </div>
 
             <Link href={'/newCollection'}>
-                <button className='btn btn-accent-outline'>
+                <button className='btn btn-outline btn-accent text-black'>
                     Continue
                 </button>
             </Link>

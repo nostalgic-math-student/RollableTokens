@@ -10,15 +10,15 @@ export interface HeroInfo {
     userAddress: string,
 }
 
-import Image from 'next/image'
-import { BigNumber } from 'ethers'
 import { NextPage } from 'next'
-import GameOfLife from '../GameOfLife'
+
 import { useState, useEffect } from 'react'
 import { uploadIPFSFormData } from './uploadMetadata';
-import Link from 'next/link'
+
 import { useRouter } from 'next/router';
-import { error } from 'console'
+
+import { blobGenerator, uploadJSONtoIPFS } from './blobGenerator';
+
 
 type templateMetadata = {
     name: string,
@@ -48,20 +48,37 @@ const Hero: NextPage<HeroInfo> = ({ userAddress }) => {
         setLoader(true);
         try {
             const imageURLForm = new FormData()
+            let animationURLForm = new FormData();
             if (selectedImage) {
                 imageURLForm.append("file", selectedImage);
             }
+            if (localStorage.getItem('codeSnippet')) {
+
+                animationURLForm = await blobGenerator(localStorage.getItem('codeSnippet'));
+            }
 
             const imageURL: string = await uploadIPFSFormData(imageURLForm);
-
+            const animationURL: string = await uploadIPFSFormData(animationURLForm)
 
             const metadata: templateMetadata = await {
                 name: formData.contractName,
                 description: formData.description,
                 image: imageURL,
                 external_url: formData.external_url,
-                animation_url: "",
+                animation_url: animationURL,
             }
+            const metadata_templates = {
+                name: formData.contractName,
+                description: formData.description,
+                image: imageURL,
+                external_url: formData.external_url,
+            }
+            console.log("finalmente,", metadata);
+
+            const res_metadata_templates = await uploadJSONtoIPFS(metadata_templates);
+
+            localStorage.setItem('templateContentURI', metadata.animation_url);
+
             setLoader(false);
             router.push("/factoryCallback");
         }
@@ -108,7 +125,7 @@ const Hero: NextPage<HeroInfo> = ({ userAddress }) => {
 
 
     return (
-        <div className='hero min-h-screen bg-base-200 flex-grow' >
+        <div className='hero min-h-screen bg-neutral flex-grow' >
             <div className="hero-content gap-6 flex">
                 {/* <GameOfLife /> */}
                 <div className="card flex-grow bg-accent shadow-xl max-w-max">
@@ -128,24 +145,24 @@ const Hero: NextPage<HeroInfo> = ({ userAddress }) => {
                             <input name="contractName"
                                 value={formData ? formData.contractName : ""}
                                 onChange={handleInputChange}
-                                className='rounded-lg text-center'
+                                className='rounded-lg text-center text-black'
                             />
                             <p> Set a name for <b>YOUR SYMBOL</b> </p>
                             <input name="contractSymbol"
                                 value={formData ? formData.contractSymbol : ""}
                                 onChange={handleInputChange}
-                                className='rounded-lg text-center'
+                                className='rounded-lg text-center text-black'
                             />
                         </div>
                     </div>
-                    <div className='card flex-grow bg-accent text-black shadow-xl'>
+                    <div className='card flex-grow bg-error text-black shadow-xl'>
                         <div className='card-body grow grid grid-cols-2 gap-8 text-xl '>
 
                             <p> What is the <b>DESCRIPTION</b> ?  </p>
                             <input name="description"
                                 value={formData ? formData.description : ""}
                                 onChange={handleInputChange}
-                                className='rounded-lg text-white text-center'
+                                className='rounded-lg text-center text-black'
                             />
                         </div>
                     </div>
@@ -156,7 +173,7 @@ const Hero: NextPage<HeroInfo> = ({ userAddress }) => {
                             <input name="cost"
                                 value={formData ? formData.cost : ""}
                                 onChange={handleInputChange}
-                                className='rounded-lg text-white text-center'
+                                className='rounded-lg text-black text-center'
                             />
                         </div>
 
@@ -167,13 +184,13 @@ const Hero: NextPage<HeroInfo> = ({ userAddress }) => {
                                 <input name="external_url"
                                     value={formData ? formData.external_url : ""}
                                     onChange={handleInputChange}
-                                    className='rounded-lg text-white text-center'
+                                    className='rounded-lg text-black text-center'
                                 />
                             </div>
                         </div>
 
                     </div>
-                    <div className='card flex-grow bg-secondary shadow-xl'>
+                    <div className='card flex-grow bg-neutral shadow-xl'>
                         <div className='card-body grow grid grid-cols-2 gap-8 text-xl '>
                             <input type="file" onChange={handleFileChange} className='rounded-lg text-center' />
                         </div>

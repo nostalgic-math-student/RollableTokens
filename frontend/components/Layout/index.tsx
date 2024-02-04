@@ -22,9 +22,9 @@ const Layout: FC<ILayout> = ({ children }) => {
                 <div className="container mx-auto flex justify-between py-4 px-4 sm:px-0">
                     <Link href={"/"}>
                         <h1 className="flex cursor-pointer items-center font-extrabold">
-                            <Image src="/RollableIcon.png" width={64} height={64} className="rounded-full" />
-                            <span className="pl-2 text-xl sm:pl-4 sm:text-2xl">
-                                Rollable Tokens
+                            <Image src="/Automaton.jpeg" width={84} height={84} className="rounded-full" />
+                            <span className="pl-2 text-xl sm:pl-4 sm:text-4xl font-roboto">
+                                Automaton
                             </span>
                         </h1>
                     </Link>
