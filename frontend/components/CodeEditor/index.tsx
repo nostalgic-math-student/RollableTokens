@@ -1,10 +1,13 @@
 "use client"
 import { useEffect, useState } from 'react'
 import React from 'react'
+import InnerHTML from 'dangerously-set-html-content';
+import Link from 'next/link';
 
 const CodeEditor = () => {
     const [comp, setComp] = useState<any>();
-    const [Code, setCode] = useState('');
+    const [Code, setCode] = useState('<h1>Ain no way, Ain no efin way</h1>');
+    const [Snippet, setSnippet] = useState("<h1>unu</h1>");
 
     useEffect(() => {
         if (window) {
@@ -16,21 +19,55 @@ const CodeEditor = () => {
         }
     }, []);
 
+    const handleInputChange = (event) => {
+        setCode(event);
+        setSnippet(event);
+        localStorage.setItem('codeSnippet', event);
+
+    };
+
     const Comps = comp;
+    const iframeStyle = {
+        resize: 'both',
+        overflow: 'auto',
+        width: '100%', // You can adjust this as needed
+        height: '500px', // Let's start with a cute height, but it can grow!
+        border: '1px solid #ccc',
+        minHeight: '100px', // Minimum height so it's never too tiny
+        minWidth: '100px', // Minimum width for the same reason
+    };
+
+
 
     return (
-        <div className='w-auto h-auto'>CodeEditor
-            {Comps && (
-                <Comps className='text-black  '
-                    value="const a = 0;"
-                    options={{
-                        mode: "js",
-                    }}
-                />
-            )}
+        <div className=' grow grid grid-cols-2 gap-8 '>
+            <div className='m-6 max-h-auto gap-6'>
+                CodeEditor
+                {Comps ? (
+                    <Comps className='text-black overflow-y-auto '
+                        value='<h1>Ain no way, Ain no efin way</h1>'
+                        maxHeight="100"
+                        options={{
+                            mode: "js",
+                            editable: true,
+                        }}
+                        onChange={handleInputChange}
+                    />
+                ) : null}
+            </div>
 
+            <div className='m-6 h-auto gap-6'>
+                Code preview:
+                <iframe style={iframeStyle} srcDoc={Snippet} />
+            </div>
 
-        </div>
+            <Link href={'/newCollection'}>
+                <button className='btn btn-accent-outline'>
+                    Continue
+                </button>
+            </Link>
+
+        </div >
     )
 }
 

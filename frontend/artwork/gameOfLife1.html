@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/p5/lib/p5.js"></script>
+    <style>
+      html, body {
+  margin: 0;
+  padding: 0;
+}
+canvas {
+  display: block;
+}
+
+    </style>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <main>
+    </main>
+    <script>
+      var arr= []
+for(var i=0; i<2; i++) {
+    arr[i] = [];
+    for(var j=0; j<100; j++){
+      arr[i][j] = []
+      for(var k=0; k<70; k++){
+        arr[i][j][k] = 0
+      }
+    }
+}
+var curr=0,run=1,next=0;
+var B=[3,4],S=[3,4];
+function setup(){
+   var canvas = createCanvas(1000,700);
+   frameRate(10);
+   noiseSeed(12210301);
+  let noiseScale = 0.1;
+  let noiseLevel = 255;
+   for(let i=0;i<70;i++)for(let j=0;j<100;j++){
+     let nx = noiseScale * i;
+    let ny = noiseScale * j;
+     arr[0][j][i]=int(noise(nx,ny)*noiseLevel > 120);
+     arr[1][j][i]=0;
+   }
+     for(let i=0;i<70;i++)for(let j=0;j<100;j++){
+      if(arr[curr][j][i]==1)fill(255,255,255);
+      else fill(0,0,0);
+      rect(j*10,i*10,10,10);
+    }
+}
+function update(curr){
+  var vec,x,y,vool=0;
+  var exp=[[-1,-1],[0,-1],[1,-1],[-1,0],[1,0],[-1,1],[0,1],[1,1]]; 
+  for(let i=0;i<70;i++)for(let j=0;j<100;j++){
+    
+    vec=0;
+    for(let k=0;k<8;k++){
+      x=j+exp[k][0];y=i+exp[k][1];
+      if(x<100&&x>=0&&y<70&&y>=0)vec+=arr[curr][x][y];
+    }
+    
+  
+    vool=0;
+    
+    if(arr[curr][j][i]==0){
+      for(let k=0;k<B.length;k++)
+        if(vec==B[k])vool=1;
+      
+      if(vool==1)
+        arr[(curr+1)%2][j][i]=1;
+      else 
+        arr[(curr+1)%2][j][i]=0;
+    }else{
+      for(let k=0;k<S.length;k++)
+        if(vec==S[k])vool=1;
+      
+      if(vool==1)
+        arr[(curr+1)%2][j][i]=1;
+      else
+        arr[(curr+1)%2][j][i]=0;
+    }
+    
+  }
+}
+function mousePressed(){
+  if(mouseButton == LEFT){
+    if(arr[curr][int(mouseX/10)][int(mouseY/10)]==1){
+      arr[curr][int(mouseX/10)][int(mouseY/10)]=0;
+      fill(0,0,0);
+    }else{
+      arr[curr][int(mouseX/10)][int(mouseY/10)]=1;
+      fill(255,255,255);
+    }
+    rect(int(mouseX/10)*10,int(mouseY/10)*10,10,10);
+  }
+}
+function mouseDragged(){
+    if(mouseButton == LEFT){
+      if(mouseX/10<100&&mouseX/10>=0&&mouseY/10<70&&mouseY/10>=0){
+        arr[curr][int(mouseX/10)][int(mouseY/10)]=1;
+        fill(255,255,255);
+        rect(int(mouseX/10)*10,int(mouseY/10)*10,10,10);
+      }
+    }else if(mouseButton==RIGHT){
+      if(mouseX/10<100&&mouseX/10>=0&&mouseY/10<70&&mouseY/10>=0){
+        arr[curr][int(mouseX/10)][int(mouseY/10)]=0;
+        fill(0,0,0);
+        rect(int(mouseX/10)*10,int(mouseY/10)*10,10,10);
+      }
+    }
+}
+function keyPressed(){
+  if(key==' '){ 
+    if(run==0)run=1;
+    else run=0;
+  }
+  if(key=='Enter'){
+    next=1;
+  }
+ /* if(key=='Enter'){
+    fill(0,0,0);
+    for(var i=0;i<70;i++)for(var j=0;j<100;j++){
+       arr[0][j][i]=0;
+       arr[1][j][i]=0;
+       rect(j*10,i*10,10,10);
+     }
+     run=0;
+  }*/
+} 
+function draw(){
+  if(run==1||next==1){
+    clear();
+    for(let i=0;i<70;i++){
+      for(let j=0;j<100;j++){
+        if(arr[curr][j][i]===0){
+          fill(0,0,0);
+        }
+        else {
+          fill(255,255,255);
+        }
+        rect(j*10,i*10,10,10);
+      }
+    }
+    update(curr);
+    curr=(curr+1)%2;
+    next=0;
+  }
+}
+    
+    </script>
+  </body>
+</html>
